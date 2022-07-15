@@ -114,7 +114,7 @@ export default function userInfo({ data }) {
           }}
         >
           <AttributionIcon
-            sx={{ alignSelf: "center", justifySelf: "center", color: "black" }}
+            sx={{ alignSelf: "start", justifySelf: "center", color: "black" }}
           ></AttributionIcon>
           <Typography
             variant="body1"

@@ -115,19 +115,34 @@ export default function Tasks({
           {taskStatus(finished, "Finished")}
         </>
       ) : (
-        <Typography
+        <Box
           sx={{
+            display: "grid",
+            gridGap: "1rem",
             alignSelf: "center",
             justifySelf: "center",
+            width: "100%",
+            height: "100%",
+            background: "#F1F1F1",
+            padding: "1rem",
+            minHeight: "14rem",
+            gridColumn: "1 / -1",
           }}
-          variant="body1"
-          fontFamily="Helvetica"
-          color="inherit"
-          align="center"
-          fontWeight={700}
         >
-          Trenutno nema podataka o taskovima
-        </Typography>
+          <Typography
+            sx={{
+              alignSelf: "center",
+              justifySelf: "center",
+            }}
+            variant="h6"
+            fontFamily="Helvetica"
+            color="inherit"
+            align="center"
+            fontWeight={700}
+          >
+            No tasks available
+          </Typography>
+        </Box>
       )}
     </Box>
   );

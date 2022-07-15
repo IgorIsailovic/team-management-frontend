@@ -90,7 +90,7 @@ export default function TaskOverview({
         </Typography>
         <Typography
           variant="h5"
-          fontFamily="fantasy"
+          fontFamily="Helvetica"
           color="inherit"
           fontWeight={300}
           align="center"
@@ -132,7 +132,7 @@ export default function TaskOverview({
         </Typography>
         <Typography
           variant="h5"
-          fontFamily="fantasy"
+          fontFamily="Helvetica"
           color="inherit"
           fontWeight={300}
           align="center"
@@ -174,7 +174,7 @@ export default function TaskOverview({
         </Typography>
         <Typography
           variant="h5"
-          fontFamily="fantasy"
+          fontFamily="Helvetica"
           color="inherit"
           fontWeight={300}
           align="center"
@@ -216,7 +216,7 @@ export default function TaskOverview({
         </Typography>
         <Typography
           variant="h5"
-          fontFamily="fantasy"
+          fontFamily="Helvetica"
           color="inherit"
           fontWeight={300}
           align="center"
