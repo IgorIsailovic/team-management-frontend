@@ -5,8 +5,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./components/MainPage";
 
 function App() {
-  const url = "http://192.168.0.22:8088";
+  //const url = "http://192.168.0.22:8088";
   //const url = "http://10.17.48.57:8088";
+  const url = "https://task-management-app-backend.herokuapp.com";
   return (
     <BrowserRouter>
       <Routes>
