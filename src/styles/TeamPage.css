@@ -1,0 +1,17 @@
+
+
+@media (min-width: 40rem) {
+    .main-container{
+        grid-template-columns: 1fr 1fr !important;
+      
+}
+.naslov{
+    grid-column: span 2;
+}
+.copyright{
+    grid-column: span 2;
+}
+
+}
+
+

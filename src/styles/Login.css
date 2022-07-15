@@ -1,0 +1,34 @@
+@media all and (min-width: 480px) {
+  .Login {
+    padding: 60px 0;
+  }
+
+  .Login form {
+    display: block;
+    margin: 0 auto;
+    max-width: 320px;
+    background-color: aliceblue;
+  }
+  .Login label {
+    display: block;
+    text-align: center;
+    font-size: 24px;
+  }
+  .Login input {
+    display: block;
+    text-align: center;
+  }
+  .Login input {
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .Login button {
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
