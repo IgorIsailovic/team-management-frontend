@@ -25,7 +25,7 @@ export default function NewTask({
   const [priority, setPriority] = useState("");
   const [team, setTeam] = useState("");
   const [status, setStatus] = useState("");
-  //const [assigner, setAssigner] = useState("");
+  const [teams, setTeams] = useState("");
   const [estDur, setEstDur] = useState("");
   const [assignies, setAssagnies] = useState([]);
   const [assignie, setAssagnie] = useState([]);
@@ -42,6 +42,7 @@ export default function NewTask({
   };
   useEffect(() => {
     getUsers();
+    getTeams();
   }, []);
 
   const localGetUpdatedUserData = () => getUpdatedUserData();
@@ -104,6 +105,21 @@ export default function NewTask({
       });
   };
 
+  const getTeams = () => {
+    let token = localStorage.getItem("token");
+    axios
+      .get(`${url}/teams/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(function (response) {
+        setTeams(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   /* function deleteTask() {
     let token = localStorage.getItem("token");
     axios
@@ -269,10 +285,15 @@ export default function NewTask({
                 label="Team"
                 onChange={handleTeam}
               >
-                <MenuItem value={1}>Operations</MenuItem>
-                <MenuItem value={2}>Admin</MenuItem>
-                <MenuItem value={3}>Legal</MenuItem>
-                <MenuItem value={4}>Development</MenuItem>
+                {teams.length > 0 ? (
+                  teams.map((team) => (
+                    <MenuItem key={team.id} value={team.id}>
+                      {team.name}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value={null}>""</MenuItem>
+                )}
               </Select>
             </FormControl>
           </Box>
