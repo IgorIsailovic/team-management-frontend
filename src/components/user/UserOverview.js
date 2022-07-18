@@ -1,10 +1,10 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import UserInfo from "./UserInfo";
-import Teams from "./Teams";
-import TaskOverview from "./TaskOverview";
+import Teams from "../team/Teams";
+import TaskOverview from "../task/TaskOverview";
 import { Typography } from "@mui/material";
-import "../styles/Shared.css";
+import "../../styles/Shared.css";
 
 export default function UserOverview({
   data,
@@ -14,6 +14,9 @@ export default function UserOverview({
   selected,
   inprogress,
   finished,
+  url,
+  getAvatar,
+  getRole,
 }) {
   return (
     <Box
@@ -21,7 +24,7 @@ export default function UserOverview({
       sx={{
         display: "grid",
         gridGap: "1rem",
-        width: "100%",
+        //width: "100%",
       }}
     >
       <UserInfo data={data}></UserInfo>
@@ -52,7 +55,12 @@ export default function UserOverview({
         >
           Teams
         </Typography>
-        <Teams data={data}></Teams>
+        <Teams
+          data={data}
+          url={url}
+          getAvatar={getAvatar}
+          getRole={getRole}
+        ></Teams>
       </Box>
       <TaskOverview
         data={data}

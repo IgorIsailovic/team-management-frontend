@@ -1,25 +1,25 @@
 import React from "react";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import "../styles/UserPage.css";
-import nikola from "../images/ceks.png";
-import igor from "../images/igor.png";
-import milan from "../images/milan.png";
+import "../../styles/UserPage.css";
+import igor from "../../images/igor.png";
+import max from "../../images/max.jpg";
+import lynda from "../../images/lynda.jpg";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AttributionIcon from "@mui/icons-material/Attribution";
 
-export default function userInfo({ data }) {
+export default function UserInfo({ data }) {
   const getAvatar = (user) => {
     switch (user) {
       case "igor":
         return igor;
-      case "nikola":
-        return nikola;
-      case "milan":
-        return milan;
+      case "max":
+        return max;
+      case "lynda":
+        return lynda;
       default:
         return null;
     }
@@ -34,7 +34,7 @@ export default function userInfo({ data }) {
           boxShadow: "1px 3px 10px  #9E9E9E",
           height: "100%",
           width: "100%",
-          maxWidth: "60rem",
+          maxWidth: "50rem",
           padding: "2rem",
           //borderRadius: "3rem",
           backgroundColor: "white",

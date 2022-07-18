@@ -10,7 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Copyright from "./Copyright";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp({ url }) {
   const [username, setUsername] = useState("");
@@ -19,6 +19,9 @@ export default function SignUp({ url }) {
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [emailValid, setEmailValid] = useState(true);
+  const [passwordValid, setPasswordValid] = useState(true);
+  const navigate = useNavigate();
   //const [result, setResult] = useState("");
 
   const axios = require("axios");
@@ -43,25 +46,40 @@ export default function SignUp({ url }) {
     return (
       username.length > 0 &&
       password.length > 0 &&
-      email.length > 0 &&
       firstname.length > 0 &&
       lastname.length > 0 &&
-      password === passwordCheck
+      password === passwordCheck &&
+      passwordValid &&
+      emailValid
     );
   }
 
+  const handleEmailChange = (event) => {
+    const reg = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+    setEmailValid(reg.test(event.target.value));
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPasswordValid(password.length > 3);
+    setPassword(event.target.value);
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
 
     axios(config)
       .then((response) => {
-        console.log(JSON.stringify(response.data));
+        // console.log(JSON.stringify(response.data));
+        navigate("/signIn", {
+          state: {
+            username: username,
+            password: password,
+          },
+        });
       })
       .catch((error) => {
         console.log(error);
       });
-
-    Navigate("/login");
   };
 
   return (
@@ -110,19 +128,20 @@ export default function SignUp({ url }) {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                required
+                type="email"
                 fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleEmailChange}
+                error={!emailValid}
+                required={true}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                required
                 fullWidth
                 id="username"
                 label="Username"
@@ -134,7 +153,6 @@ export default function SignUp({ url }) {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                required
                 fullWidth
                 name="password"
                 label="Password"
@@ -142,7 +160,14 @@ export default function SignUp({ url }) {
                 id="password"
                 autoComplete="new-password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handlePasswordChange}
+                error={!passwordValid}
+                required={true}
+                helperText={
+                  !passwordValid
+                    ? "Passwords must be at least 4 characters "
+                    : " "
+                }
               />
             </Grid>
             <Grid item xs={12}>

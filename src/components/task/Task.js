@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import nikola from "../images/ceks.png";
-import igor from "../images/igor.png";
-import milan from "../images/milan.png";
+import igor from "../../images/igor.png";
+import max from "../../images/max.jpg";
+import lynda from "../../images/lynda.jpg";
 import TaskModal from "./TaskModal";
 import TaskCard from "./TaskCard";
 
 export default function Task({ task, getUpdatedUserData, url }) {
   const [open, setOpen] = useState(false);
-  const [taskResult, setTaskResult] = useState("");
-  const [taskResult1, setTaskResult1] = useState("");
-  const [assigner, setAssigner] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [team, setTeam] = useState("");
+  const [reporter, setReporter] = useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [assagnies, setAssagnies] = useState([]);
+  const [assigniees, setAssigniees] = useState([]);
 
   function cardClick() {
     let token = localStorage.getItem("token");
-    console.log(task.id);
+    // console.log(task.id);
     axios
       .get(`${url}/tasks/${task.id}`, {
         headers: {
@@ -27,7 +27,7 @@ export default function Task({ task, getUpdatedUserData, url }) {
       .then(function (response) {
         axios
           .all([
-            axios.get(`${url}/users/getOne/${response.data.assigner}`, {
+            axios.get(`${url}/users/getOne/${response.data.reporter}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -40,9 +40,9 @@ export default function Task({ task, getUpdatedUserData, url }) {
           ])
           .then(
             axios.spread((...responses) => {
-              setTaskResult(`${responses[0].data.firstName}`);
-              setTaskResult1(` ${responses[1].data.name}`);
-              setAssigner(getAvatar(responses[0].data.username));
+              setFirstName(`${responses[0].data.firstName}`);
+              setTeam(` ${responses[1].data.name}`);
+              setReporter(getAvatar(responses[0].data.username));
             })
           )
           .catch(function (error) {
@@ -55,7 +55,7 @@ export default function Task({ task, getUpdatedUserData, url }) {
     handleOpen();
   }
 
-  const getAssagnies = () => {
+  const getAssigniees = () => {
     let token = localStorage.getItem("token");
     axios
       .get(`${url}/users/getUsersForTask/${task.id}`, {
@@ -64,7 +64,7 @@ export default function Task({ task, getUpdatedUserData, url }) {
         },
       })
       .then(function (response) {
-        setAssagnies(response.data);
+        setAssigniees(response.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -72,17 +72,17 @@ export default function Task({ task, getUpdatedUserData, url }) {
   };
 
   useEffect(() => {
-    getAssagnies();
+    getAssigniees();
   }, []);
 
   const getAvatar = (user) => {
     switch (user) {
       case "igor":
         return igor;
-      case "nikola":
-        return nikola;
-      case "milan":
-        return milan;
+      case "max":
+        return max;
+      case "lynda":
+        return lynda;
       default:
         return null;
     }
@@ -95,11 +95,11 @@ export default function Task({ task, getUpdatedUserData, url }) {
           task={task}
           open={open}
           handleClose={handleClose}
-          taskResult={taskResult}
-          taskResult1={taskResult1}
-          assigner={assigner}
-          getAssagnies={getAssagnies}
-          assagnies={assagnies}
+          firstName={firstName}
+          team={team}
+          reporter={reporter}
+          getAssigniees={getAssigniees}
+          assigniees={assigniees}
           getAvatar={getAvatar}
           getUpdatedUserData={getUpdatedUserData}
           url={url}
@@ -107,8 +107,8 @@ export default function Task({ task, getUpdatedUserData, url }) {
         <TaskCard
           task={task}
           cardClick={cardClick}
-          getAssagnies={getAssagnies}
-          assagnies={assagnies}
+          getAssigniees={getAssigniees}
+          assigniees={assigniees}
           getAvatar={getAvatar}
         ></TaskCard>
       </div>

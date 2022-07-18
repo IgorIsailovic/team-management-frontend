@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { Box, IconButton } from "@mui/material";
@@ -9,20 +9,23 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import axios from "axios";
 import Tooltip from "@mui/material/Tooltip";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CloseIcon from "@mui/icons-material/Close";
 import jwt_decode from "jwt-decode";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import SaveIcon from "@mui/icons-material/Save";
+import Select from "@mui/material/Select";
 
 export default function TaskModal({
   task,
   open,
   handleClose,
-  taskResult,
-  taskResult1,
-  assigner,
-  getAssagnies,
-  assagnies,
+  firstName,
+  team,
+  reporter,
+  getAssigniees,
+  assigniees,
   getAvatar,
   getUpdatedUserData,
   url,
@@ -38,13 +41,15 @@ export default function TaskModal({
     p: 2,
     display: "grid",
     gridTemplateColumns: "1fr",
-    gridTemplateRows: "auto auto 3fr",
+    gridTemplateRows: "auto auto 3fr auto",
     overflow: "scroll",
 
-    maxHeight: "80%",
+    maxHeight: "85%",
     maxWidth: "50rem",
     minWidth: "20rem",
   };
+
+  const [status, setStatus] = useState(task.status);
 
   const getRole = () => {
     let token = localStorage.getItem("token");
@@ -53,6 +58,34 @@ export default function TaskModal({
     return roles;
   };
 
+  const updateTask = () => {
+    let token = localStorage.getItem("token");
+    var axios = require("axios");
+    //console.log(status);
+
+    var config = {
+      method: "get",
+      url: `${url}/tasks/changeTaskStatus/${task.id}/${status}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "text/plain",
+      },
+    };
+
+    axios(config)
+      .then(function (response) {
+        //console.log(JSON.stringify(response.data));
+        localGetUpdatedUserData();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const localHandleClose = () => {
+    handleClose();
+    setStatus(task.status);
+  };
   const localGetUpdatedUserData = () => getUpdatedUserData();
 
   function deleteTask() {
@@ -64,7 +97,7 @@ export default function TaskModal({
         },
       })
       .then(function (response) {
-        console.log("task deleted");
+        //console.log("task deleted");
         localGetUpdatedUserData();
       })
       .catch(function (error) {
@@ -72,20 +105,12 @@ export default function TaskModal({
       });
   }
 
-  const statusParser = (status) => {
-    let firstLetter = status.charAt(0);
-    let secondLetter = status.charAt(1).toLowerCase();
-    let rest = status.slice(2);
-    rest = rest.toLowerCase();
-    let parsed =
-      status === "INPROGRESS"
-        ? `${firstLetter}${secondLetter} ${rest}`
-        : `${firstLetter}${secondLetter}${rest}`;
-    return parsed;
+  const handleStatus = (event) => {
+    setStatus(event.target.value);
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={localHandleClose}>
       <Box sx={style} className="card-modal">
         <Box
           className="modal-header"
@@ -99,30 +124,33 @@ export default function TaskModal({
           >
             Taks ID: {task.id}
           </Typography>
-          {getRole() === "Admin" ? (
+          {getRole() === "Team Leader" ? (
             <>
-              <Tooltip title="Edit">
-                <IconButton
-                  sx={{
-                    alignSelf: "start",
-                    justifySelf: "center",
-                    color: "primary.main",
-                  }}
-                  onClick={null}
-                >
-                  <EditIcon></EditIcon>
-                </IconButton>
-              </Tooltip>
+              {status !== task.status ? (
+                <Tooltip title="Save changes">
+                  <IconButton
+                    sx={{
+                      alignSelf: "start",
+                      justifySelf: "center",
+                      color: "primary.main",
+                    }}
+                    onClick={updateTask}
+                  >
+                    <SaveIcon />
+                  </IconButton>
+                </Tooltip>
+              ) : null}
               <Tooltip title="Delete">
                 <IconButton
                   sx={{
                     alignSelf: "start",
                     justifySelf: "center",
                     color: "primary.main",
+                    gridColumn: "3/4",
                   }}
                   onClick={deleteTask}
                 >
-                  <DeleteForeverIcon></DeleteForeverIcon>
+                  <DeleteForeverIcon />
                 </IconButton>
               </Tooltip>
             </>
@@ -154,7 +182,11 @@ export default function TaskModal({
           <Typography
             id="modal-modal-description"
             align="center"
-            sx={{ mt: 2 }}
+            sx={{
+              maxWidth: "32rem",
+              mt: 2,
+              wordWrap: "break-word",
+            }}
           >
             {task.description}
           </Typography>
@@ -211,7 +243,7 @@ export default function TaskModal({
             </Typography>
 
             <Typography align="center" sx={{ m: 1 }}>
-              {taskResult1}
+              {team}
             </Typography>
           </Box>
           <Box sx={{ display: "grid", m: 1 }}>
@@ -223,17 +255,18 @@ export default function TaskModal({
             >
               Status
             </Typography>
-            <Typography
-              color="inherit"
-              align="center"
-              sx={{
-                alignSelf: "center",
-                justifySelf: "center",
-                marginBottom: "1rem",
-              }}
+            <Select
+              required
+              displayEmpty
+              value={status}
+              onChange={handleStatus}
+              sx={{ height: "2rem" }}
             >
-              {statusParser(task.status)}
-            </Typography>
+              <MenuItem value={"BACKLOG"}>Backlog</MenuItem>
+              <MenuItem value={"SELECTED"}>Selected</MenuItem>
+              <MenuItem value={"INPROGRESS"}>In progress</MenuItem>
+              <MenuItem value={"FINISHED"}>Finished</MenuItem>
+            </Select>
           </Box>
           <Box sx={{ display: "grid", m: 1 }}>
             <Typography
@@ -258,11 +291,11 @@ export default function TaskModal({
           </Box>
           <Box sx={{ display: "grid", m: 1 }}>
             <Typography variant="h7" fontWeight={600} align="center" m="1">
-              Assigner
+              Reporter
             </Typography>
-            <Tooltip title={taskResult}>
+            <Tooltip title={firstName}>
               <Avatar
-                src={assigner}
+                src={reporter}
                 sx={{
                   bgcolor: "white",
                   justifySelf: "center",
@@ -278,7 +311,7 @@ export default function TaskModal({
               align="center"
               sx={{ m: 1 }}
             >
-              Assignies
+              Assigniees
             </Typography>
             <AvatarGroup
               max={4}
@@ -287,7 +320,7 @@ export default function TaskModal({
                 m: 1,
               }}
             >
-              {assagnies.map((assignee) => {
+              {assigniees.map((assignee) => {
                 return (
                   <Tooltip key={assignee.id} title={assignee.firstName}>
                     <Avatar
@@ -300,6 +333,24 @@ export default function TaskModal({
               })}
             </AvatarGroup>
           </Box>
+        </Box>
+        <Box sx={{ mt: 3, display: "grid", width: "100%" }}>
+          <Button
+            disabled={status === task.status}
+            variant="outlined"
+            onClick={updateTask}
+            startIcon={<SaveIcon />}
+            sx={{ justifySelf: "center", m: 1 }}
+          >
+            <Typography
+              variant="h7"
+              fontWeight={600}
+              align="center"
+              sx={{ m: 1 }}
+            >
+              Save changes
+            </Typography>
+          </Button>
         </Box>
       </Box>
     </Modal>

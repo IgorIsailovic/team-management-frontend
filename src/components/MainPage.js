@@ -5,8 +5,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
 import CssBaseline from "@mui/material/CssBaseline";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -15,13 +13,13 @@ import ListItemText from "@mui/material/ListItemText";
 import Drawer from "@mui/material/Drawer";
 import { useLocation } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
-import nikola from "../images/ceks.png";
 import igor from "../images/igor.png";
-import milan from "../images/milan.png";
-import Tasks from "./Tasks";
-import Teams from "./Teams";
-import UserInfo from "./UserInfo";
-import UserOverview from "./UserOverview";
+import max from "../images/max.jpg";
+import lynda from "../images/lynda.jpg";
+import Tasks from "./task/Tasks";
+import Teams from "./team/Teams";
+import UserInfoPassword from "./user/UserInfoPassword";
+import UserOverview from "./user/UserOverview";
 import GroupsIcon from "@mui/icons-material/Groups";
 import ListSubheader from "@mui/material/ListSubheader";
 import Avatar from "@mui/material/Avatar";
@@ -31,13 +29,13 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import jwt_decode from "jwt-decode";
 import { useEffect } from "react";
 import axios from "axios";
+import Copyright from "./Copyright";
 
 const drawerWidth = 240;
 
 export default function MainPage({ url }) {
   //let token = localStorage.getItem("token");
-  const [auth, setAuth] = useState(true);
-  const [anchorEl, setAnchorEl] = useState(null);
+
   const [open, setOpen] = useState(false);
   const [view, setView] = useState("user");
   const [drawer, setDrawer] = useState(null);
@@ -49,6 +47,12 @@ export default function MainPage({ url }) {
   const [isLoading, setLoading] = useState(true);
 
   //const navigate = useNavigate();
+  const getRole = () => {
+    let token = localStorage.getItem("token");
+    let decoded = jwt_decode(token);
+    let roles = decoded.roles[0].authority;
+    return roles;
+  };
 
   const getUpdatedUserData = () => {
     let token = localStorage.getItem("token");
@@ -74,7 +78,7 @@ export default function MainPage({ url }) {
         );
         setLoading(false);
 
-        console.log(response.data);
+        //console.log(response.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -97,11 +101,8 @@ export default function MainPage({ url }) {
   };*/
 
   const handleMenu = (event) => {
-    handleClickView("userInfo");
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
+    if (open) setOpen(false);
+    setView("userInfo");
   };
 
   const handleClickView = (pageView) => {
@@ -148,10 +149,20 @@ export default function MainPage({ url }) {
             selected={selected}
             inprogress={inprogress}
             finished={finished}
+            url={url}
+            getAvatar={getAvatar}
+            getRole={getRole}
           ></UserOverview>
         );
       case "teams":
-        return <Teams data={data}></Teams>;
+        return (
+          <Teams
+            data={data}
+            url={url}
+            getAvatar={getAvatar}
+            getRole={getRole}
+          ></Teams>
+        );
       case "tasks":
         return (
           <Tasks
@@ -163,10 +174,38 @@ export default function MainPage({ url }) {
             selected={selected}
             inprogress={inprogress}
             finished={finished}
+            inTeams={false}
           ></Tasks>
         );
       case "userInfo":
-        return <UserInfo data={data}></UserInfo>;
+        return (
+          <UserInfoPassword
+            data={data}
+            url={url}
+            getUpdatedUserData={getUpdatedUserData}
+            isLoading={isLoading}
+            backlog={backlog}
+            selected={selected}
+            inprogress={inprogress}
+            finished={finished}
+            getAvatar={getAvatar}
+            getRole={getRole}
+          ></UserInfoPassword>
+        );
+      default:
+        return null;
+    }
+  };
+  const getTitle = (view) => {
+    switch (view) {
+      case "user":
+        return `${data.firstName}'s Dashboard`;
+      case "teams":
+        return ` ${data.firstName}'s Teams`;
+      case "tasks":
+        return ` ${data.firstName}'s Tasks`;
+      case "userInfo":
+        return ` ${data.firstName}'s Info`;
       default:
         return null;
     }
@@ -175,10 +214,10 @@ export default function MainPage({ url }) {
     switch (user) {
       case "igor":
         return igor;
-      case "nikola":
-        return nikola;
-      case "milan":
-        return milan;
+      case "max":
+        return max;
+      case "lynda":
+        return lynda;
       default:
         return null;
     }
@@ -211,14 +250,13 @@ export default function MainPage({ url }) {
           backgroundColor: "primary.main",
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ width: "100%" }}>
           {!drawer ? (
             <IconButton
               size="large"
               edge="start"
               color="inherit"
               aria-label="menu"
-              sx={{ mr: 2 }}
               onClick={open ? handleDrawerClose : handleDrawerOpen}
             >
               <MenuIcon />
@@ -227,50 +265,32 @@ export default function MainPage({ url }) {
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1 }}
-          ></Typography>
-          {auth && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <Avatar
-                  alt={data.firstName.charAt(0) + data.lastName.charAt(0)}
-                  src={getAvatar(data.username)}
-                  sx={{
-                    color: "primary.main",
-                    bgcolor: "white",
-                    justifySelf: "center",
-                  }}
-                >
-                  {data.firstName.charAt(0) + data.lastName.charAt(0)}
-                </Avatar>
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+            sx={{ flexGrow: 1, alignSelf: "center" }}
+          >
+            {getTitle(view)}
+          </Typography>
+          <Box>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <Avatar
+                alt={data.firstName.charAt(0) + data.lastName.charAt(0)}
+                src={getAvatar(data.username)}
+                sx={{
+                  color: "primary.main",
+                  bgcolor: "white",
+                  justifySelf: "center",
                 }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
-          )}
+                {data.firstName.charAt(0) + data.lastName.charAt(0)}
+              </Avatar>
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -278,7 +298,7 @@ export default function MainPage({ url }) {
         open={open}
         PaperProps={{
           sx: {
-            backgroundColor: "secondary.main",
+            backgroundColor: "primary.main",
           },
         }}
         sx={{
@@ -309,51 +329,57 @@ export default function MainPage({ url }) {
           >
             <ListItemButton
               onClick={() => handleClickView("user")}
-              sx={{ backgroundColor: "secondary.main" }}
+              sx={{ backgroundColor: "primary.main" }}
             >
-              <ListItemIcon sx={{ color: "primary.main" }}>
+              <ListItemIcon sx={{ color: "secondary.main" }}>
                 <DashboardIcon />
               </ListItemIcon>
-              <ListItemText primary="Overview" sx={{ color: "primary.main" }} />
+              <ListItemText
+                primary="Dashboard"
+                sx={{ color: "secondary.main" }}
+              />
             </ListItemButton>
             <ListItemButton
               onClick={() => handleClickView("teams")}
-              sx={{ backgroundColor: "secondary.main" }}
+              sx={{ backgroundColor: "primary.main" }}
             >
-              <ListItemIcon sx={{ color: "primary.main" }}>
+              <ListItemIcon sx={{ color: "secondary.main" }}>
                 <GroupsIcon />
               </ListItemIcon>
-              <ListItemText primary="Teams" sx={{ color: "primary.main" }} />
+              <ListItemText primary="Teams" sx={{ color: "secondary.main" }} />
             </ListItemButton>
             <ListItemButton
               onClick={() => handleClickView("tasks")}
-              sx={{ backgroundColor: "secondary.main" }}
+              sx={{ backgroundColor: "primary.main" }}
             >
-              <ListItemIcon sx={{ color: "primary.main" }}>
+              <ListItemIcon sx={{ color: "secondary.main" }}>
                 <AssignmentIcon />
               </ListItemIcon>
-              <ListItemText primary="Tasks" sx={{ color: "primary.main" }} />
+              <ListItemText primary="Tasks" sx={{ color: "secondary.main" }} />
             </ListItemButton>
             <ListItemButton
               onClick={() => handleClickView("userInfo")}
-              sx={{ backgroundColor: "secondary.main" }}
+              sx={{ backgroundColor: "primary.main" }}
             >
-              <ListItemIcon sx={{ color: "primary.main" }}>
+              <ListItemIcon sx={{ color: "secondary.main" }}>
                 <PersonIcon />
               </ListItemIcon>
               <ListItemText
                 primary="User Info"
-                sx={{ color: "primary.main" }}
+                sx={{ color: "secondary.main" }}
               />
             </ListItemButton>
             <ListItemButton
               onClick={() => handleClickView(logOut)}
-              sx={{ backgroundColor: "secondary.main" }}
+              sx={{ backgroundColor: "primary.main" }}
             >
-              <ListItemIcon sx={{ color: "primary.main" }}>
+              <ListItemIcon sx={{ color: "secondary.main" }}>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary="Log Out" sx={{ color: "primary.main" }} />
+              <ListItemText
+                primary="Log Out"
+                sx={{ color: "secondary.main" }}
+              />
             </ListItemButton>
           </List>
         </Box>
@@ -369,6 +395,7 @@ export default function MainPage({ url }) {
       >
         <Toolbar />
         <Box id="main">{getView(view)}</Box>
+        <Copyright sx={{ mt: 5 }} />
       </Box>
     </Box>
   );

@@ -4,7 +4,6 @@ import { Box, IconButton } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import CloseIcon from "@mui/icons-material/Close";
-import jwt_decode from "jwt-decode";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -12,6 +11,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import SaveIcon from "@mui/icons-material/Save";
 import Tooltip from "@mui/material/Tooltip";
+import Button from "@mui/material/Button";
 
 export default function NewTask({
   open,
@@ -27,28 +27,63 @@ export default function NewTask({
   const [status, setStatus] = useState("");
   const [teams, setTeams] = useState("");
   const [estDur, setEstDur] = useState("");
-  const [assignies, setAssagnies] = useState([]);
-  const [assignie, setAssagnie] = useState([]);
+  const [assigniees, setAssigniees] = useState([]);
+  const [assigniee, setAssigniee] = useState([]);
 
-  const localHandleClose = () => {
-    handleClose();
+  const getAssignieesMembers = () => {
+    if (team !== "") {
+      let token = localStorage.getItem("token");
+      axios
+        .get(`${url}/users/getUsersForTeam/${team}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          //  console.log(response.data);
+          setAssigniees(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  };
+
+  const resetFields = () => {
     setTaskName("");
     setTaskDescription("");
     setPriority("");
     setStatus("");
     setTeam("");
-    setAssagnie("");
     setEstDur("");
+    setAssigniee([]);
   };
+  const localHandleClose = () => {
+    resetFields();
+    handleClose();
+  };
+
   useEffect(() => {
     getUsers();
     getTeams();
   }, []);
 
+  useEffect(() => {
+    getAssignieesMembers();
+  }, [team]);
+
   const localGetUpdatedUserData = () => getUpdatedUserData();
 
-  const taskNameError = () => {
-    return taskName.length < 1 || taskName.length > 55 ? true : false;
+  const fieldsEmty = () => {
+    return taskName === "" ||
+      taskDescription === "" ||
+      priority === "" ||
+      team === "" ||
+      status === "" ||
+      estDur === "" ||
+      assigniee === ""
+      ? true
+      : false;
   };
 
   const style = {
@@ -69,13 +104,6 @@ export default function NewTask({
     minWidth: "20rem",
   };
 
-  const getRole = () => {
-    let token = localStorage.getItem("token");
-    let decoded = jwt_decode(token);
-    let roles = decoded.roles[0].authority;
-    return roles;
-  };
-
   const handlePriority = (event) => {
     setPriority(event.target.value);
   };
@@ -86,8 +114,8 @@ export default function NewTask({
     setStatus(event.target.value);
   };
 
-  const handleAssagnie = (event) => {
-    setAssagnie(event.target.value);
+  const handleAssigniee = (event) => {
+    setAssigniee(event.target.value);
   };
   const getUsers = () => {
     let token = localStorage.getItem("token");
@@ -98,7 +126,7 @@ export default function NewTask({
         },
       })
       .then(function (response) {
-        setAssagnies(response.data);
+        setAssigniees(response.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -120,21 +148,6 @@ export default function NewTask({
         console.log(error);
       });
   };
-  /* function deleteTask() {
-    let token = localStorage.getItem("token");
-    axios
-      .delete(`http://localhost:8088/tasks/${task.id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(function (response) {
-        console.log("task deleted");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }*/
 
   const addTask = () => {
     let token = localStorage.getItem("token");
@@ -145,7 +158,7 @@ export default function NewTask({
       est_dur: estDur,
       status: status,
       priority: priority,
-      assigner: userData.id,
+      reporter: userData.id,
       team: team,
     });
 
@@ -161,32 +174,34 @@ export default function NewTask({
 
     axios(config1)
       .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        axios
-          .get(`${url}/users/addUserToTask/${assignie}/${response.data}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then(function (response) {
-            console.log(response);
-            localGetUpdatedUserData();
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        // console.log(JSON.stringify(response.data));
+        for (const a of assigniee) {
+          axios
+            .get(`${url}/users/addUserToTask/${a}/${response.data}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then(function (response) {
+              // console.log(response);
+              localGetUpdatedUserData();
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
       })
       .catch(function (error) {
         console.log(error);
       });
-    handleClose();
+    localHandleClose();
   };
   return (
     <Modal open={open} onClose={localHandleClose}>
       <Box sx={style} className="card-new">
         <Box
           className="new-card-header"
-          sx={{ display: "grid", gridTemplateColumns: "7fr 1fr 1fr" }}
+          sx={{ display: "grid", gridTemplateColumns: "7fr  1fr" }}
         >
           <Typography
             variant="body1"
@@ -196,22 +211,7 @@ export default function NewTask({
           >
             New Task
           </Typography>
-          {getRole() === "Admin" ? (
-            <>
-              <Tooltip title="Save">
-                <IconButton
-                  sx={{
-                    alignSelf: "start",
-                    justifySelf: "center",
-                    color: "primary.main",
-                  }}
-                  onClick={addTask}
-                >
-                  <SaveIcon></SaveIcon>
-                </IconButton>
-              </Tooltip>
-            </>
-          ) : null}
+
           <Tooltip title="Close">
             <IconButton
               sx={{
@@ -226,9 +226,11 @@ export default function NewTask({
             </IconButton>
           </Tooltip>
         </Box>
+
         <Box sx={{ m: 2 }}>
-          <Box sx={{ m: 2, width: "100%" }}>
+          <Box sx={{ m: 1 }}>
             <TextField
+              type={"text"}
               autoComplete="task-name"
               name="taskName"
               required
@@ -238,12 +240,12 @@ export default function NewTask({
               autoFocus
               value={taskName}
               onChange={(e) => setTaskName(e.target.value)}
-              //error={taskNameError}
-              //helperText={taskNameError?"Invalid size":""}
+              inputProps={{ maxLength: 50 }}
             />
           </Box>
-          <Box sx={{ m: 2, width: "100%" }}>
+          <Box sx={{ m: 1 }}>
             <TextField
+              type={"text"}
               autoComplete="task-description"
               name="taskDescription"
               required
@@ -263,6 +265,7 @@ export default function NewTask({
             <FormControl fullWidth required>
               <InputLabel id="demo-simple-select-label">Priority</InputLabel>
               <Select
+                required
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={priority}
@@ -277,8 +280,41 @@ export default function NewTask({
           </Box>
           <Box sx={{ display: "grid", m: 1 }}>
             <FormControl fullWidth required>
+              <InputLabel id="demo-simple-select-label">Status</InputLabel>
+              <Select
+                required
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={status}
+                label="Status"
+                onChange={handleStatus}
+              >
+                <MenuItem value={0}>Backlog</MenuItem>
+                <MenuItem value={1}>Selected</MenuItem>
+                <MenuItem value={2}>In progress</MenuItem>
+                <MenuItem value={3}>Finished</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <Box sx={{ display: "grid", m: 1 }}>
+            <TextField
+              type={"number"}
+              autoComplete="est-dur"
+              name="estDuration"
+              required
+              fullWidth
+              id="estDuration"
+              label="Estimated duration (h)"
+              autoFocus
+              value={estDur}
+              onChange={(e) => setEstDur(e.target.value.toString().slice(0, 3))}
+            />
+          </Box>
+          <Box sx={{ display: "grid", m: 1 }}>
+            <FormControl fullWidth required>
               <InputLabel id="demo-simple-select-label">Team</InputLabel>
               <Select
+                required
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={team}
@@ -297,53 +333,39 @@ export default function NewTask({
               </Select>
             </FormControl>
           </Box>
-          <Box sx={{ display: "grid", m: 1 }}>
-            <FormControl fullWidth required>
-              <InputLabel id="demo-simple-select-label">Status</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={status}
-                label="Status"
-                onChange={handleStatus}
-              >
-                <MenuItem value={0}>Backlog</MenuItem>
-                <MenuItem value={1}>Selected</MenuItem>
-                <MenuItem value={2}>In progress</MenuItem>
-                <MenuItem value={3}>Finished</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-          <Box sx={{ display: "grid", m: 1 }}>
-            <TextField
-              autoComplete="est-dur"
-              name="estDuration"
-              required
-              fullWidth
-              id="estDuration"
-              label="Estimated duration (h)"
-              autoFocus
-              value={estDur}
-              onChange={(e) => setEstDur(e.target.value)}
-            />
-          </Box>
-          <Box sx={{ display: "grid", m: 1 }}>
-            <FormControl fullWidth required>
-              <InputLabel id="demo-simple-select-label">Assignies</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={assignie}
-                label="Assignies"
-                onChange={handleAssagnie}
-              >
-                {assignies.map((assignie) => (
-                  <MenuItem key={assignie.id} value={assignie.id}>
-                    {assignie.firstName}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          {team === "" ? null : (
+            <Box sx={{ display: "grid", m: 1 }}>
+              <FormControl fullWidth required>
+                <InputLabel id="demo-simple-select-label">
+                  Assigniees
+                </InputLabel>
+                <Select
+                  required
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={assigniee}
+                  label="Assigniees"
+                  multiple
+                  onChange={handleAssigniee}
+                >
+                  {assigniees.map((assigniee) => (
+                    <MenuItem key={assigniee.id} value={assigniee.id}>
+                      {assigniee.firstName}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          )}
+          <Box sx={{ mt: 3, display: "grid" }}>
+            <Button
+              disabled={fieldsEmty()}
+              variant="outlined"
+              onClick={addTask}
+              startIcon={<SaveIcon />}
+            >
+              Save Task
+            </Button>
           </Box>
         </Box>
       </Box>

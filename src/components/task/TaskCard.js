@@ -12,12 +12,12 @@ import Tooltip from "@mui/material/Tooltip";
 export default function TaskCard({
   task,
   cardClick,
-  getAssagnies,
-  assagnies,
+  getAssigniees,
+  assigniees,
   getAvatar,
 }) {
   useEffect(() => {
-    getAssagnies();
+    getAssigniees();
   }, []);
 
   return (
@@ -34,7 +34,7 @@ export default function TaskCard({
         width: "100%",
         textAlign: "center",
         borderRadius: "0rem",
-        minWidth: "280px",
+        minWidth: "12rem",
         //maxWidth: "50rem",
         height: "8rem",
         minHeight: "8rem",
@@ -100,7 +100,7 @@ export default function TaskCard({
             "& .MuiAvatar-root": { width: 24, height: 24, fontSize: 15 },
           }}
         >
-          {assagnies.map((assignee) => {
+          {assigniees.map((assignee) => {
             return (
               <Tooltip key={assignee.id} title={assignee.firstName}>
                 <Avatar

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Task from "./Task";
 import Box from "@mui/material/Box";
-import "../styles/Shared.css";
+import "../../styles/Shared.css";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import NewTask from "./NewTask";
 import jwt_decode from "jwt-decode";
-import SkeletonTasks from "./SkeletonTasks";
+import SkeletonTasks from "../skeleton/SkeletonTasks";
 
 export default function Tasks({
   data,
@@ -18,6 +18,7 @@ export default function Tasks({
   selected,
   inprogress,
   finished,
+  inTeams,
 }) {
   const handleOpenNew = () => setOpenNew(true);
   const handleCloseNew = () => setOpenNew(false);
@@ -74,46 +75,63 @@ export default function Tasks({
     );
   };
 
-  return (
+  return isLoading ? (
+    <SkeletonTasks />
+  ) : (
     <Box
       className="tasks"
       sx={{
-        display: "grid",
+        //display: "grid",
         width: "100%",
         height: "100%",
         gridGap: "1rem",
         alignSelf: "center",
         justifySelf: "center",
-        gridColumn: "1 / -1",
       }}
     >
-      {getRole() === "Admin" ? (
-        <Fab
-          color="primary"
-          aria-label="add"
-          sx={{ position: "fixed", bottom: 50, right: 50 }}
-          onClick={handleOpenNew}
-        >
-          <AddIcon />
-        </Fab>
+      {getRole() === "Team Leader" && !inTeams ? (
+        <>
+          <Fab
+            color="primary"
+            aria-label="add"
+            sx={{ position: "fixed", bottom: 50, right: 50 }}
+            onClick={handleOpenNew}
+          >
+            <AddIcon />
+          </Fab>
+
+          <NewTask
+            open={openNew}
+            handleClose={handleCloseNew}
+            userData={data}
+            getUpdatedUserData={getUpdatedUserData}
+            url={url}
+          ></NewTask>
+        </>
       ) : null}
-      <NewTask
-        open={openNew}
-        handleClose={handleCloseNew}
-        userData={data}
-        getUpdatedUserData={getUpdatedUserData}
-        url={url}
-      ></NewTask>
       {backlog.length > 0 ||
       selected.length > 0 ||
       inprogress.length > 0 ||
       finished.length > 0 ? (
-        <>
+        <Box
+          className="tasks"
+          sx={{
+            display: "grid",
+            gridGap: "1rem",
+            alignSelf: "center",
+            justifySelf: "center",
+            width: "100%",
+            height: "100%",
+            padding: "1rem",
+            minHeight: "14rem",
+            gridTemplateColumns: "1fr",
+          }}
+        >
           {taskStatus(backlog, "Backlog")}
           {taskStatus(selected, "Selected")}
           {taskStatus(inprogress, "In progress")}
           {taskStatus(finished, "Finished")}
-        </>
+        </Box>
       ) : (
         <Box
           sx={{
