@@ -5,6 +5,9 @@ import "../../styles/UserPage.css";
 import igor from "../../images/igor.png";
 import max from "../../images/max.jpg";
 import lynda from "../../images/lynda.jpg";
+import melinda from "../../images/melinda.jpg";
+import marta from "../../images/marta.jpg";
+import jim from "../../images/jim.jpg";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -20,6 +23,12 @@ export default function UserInfo({ data }) {
         return max;
       case "lynda":
         return lynda;
+      case "melinda":
+        return melinda;
+      case "marta":
+        return marta;
+      case "jim":
+        return jim;
       default:
         return null;
     }

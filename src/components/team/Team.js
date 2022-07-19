@@ -4,14 +4,7 @@ import { IconButton, Typography } from "@mui/material";
 import axios from "axios";
 import TeamModal from "./TeamModal";
 
-export default function Team({
-  team,
-  data,
-  url,
-
-  getAvatar,
-  getRole,
-}) {
+export default function Team({ team, data, url, getAvatar, getRole }) {
   const handleOpen = () => {
     setOpen(true);
   };

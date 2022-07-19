@@ -16,6 +16,7 @@ import { Alert, AlertTitle } from "@mui/material";
 import Copyright from "./Copyright";
 import ResponsiveDialog from "./ResponsiveDialog";
 import { useLocation } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function SignIn({ url }) {
   const location = useLocation();
@@ -25,6 +26,7 @@ export default function SignIn({ url }) {
   const [username, setUsername] = useState(userName);
   const [password, setPassword] = useState(passwd);
   const [validCredentials, setValidCredentials] = useState(true);
+  const [loader, setLoader] = useState(false);
   const handleShowError = () => setValidCredentials(false);
   const handleColseError = () => setValidCredentials(true);
   const navigate = useNavigate();
@@ -44,6 +46,7 @@ export default function SignIn({ url }) {
   };
 
   function handleSubmit(event) {
+    setLoader(true);
     event.preventDefault();
     //console.log(url);
     axios
@@ -86,6 +89,7 @@ export default function SignIn({ url }) {
           });
       })
       .catch(function (error) {
+        setLoader(false);
         error.response.status === 403 ? handleShowError() : alert("Error");
         console.log(error.response);
         console.log(error);
@@ -150,12 +154,16 @@ export default function SignIn({ url }) {
           >
             Sign In
           </Button>
-          {validCredentials === false ? (
-            <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
-              <strong> Wrong Username or Password!</strong>
-            </Alert>
-          ) : null}
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            {validCredentials === false ? (
+              <Alert severity="error">
+                <AlertTitle>Error</AlertTitle>
+                <strong> Wrong Username or Password!</strong>
+              </Alert>
+            ) : loader ? (
+              <CircularProgress sx={{ alignSelf: "center" }} />
+            ) : null}
+          </Box>
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2" onClick={handleClickOpenDialog}>

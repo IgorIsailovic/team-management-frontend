@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
@@ -10,6 +10,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import AvatarGroup from "@mui/material/AvatarGroup";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import UserSelectModal from "../user/UsersSelectModal";
+import jwt_decode from "jwt-decode";
 
 export default function TeamModal({
   team,
@@ -46,14 +48,34 @@ export default function TeamModal({
     minWidth: "20rem",
   };
 
-  const addTemMember = () => {
+  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState("");
+  const [openU, setOpenU] = useState(false);
+  const handleCloseU = () => setOpenU(false);
+  const handleOpenU = () => {
+    getAllUsers();
+    setOpenU(true);
+  };
+
+  const handleUser = (event) => {
+    setUser(event.target.value);
+  };
+  const getRole = () => {
+    let token = localStorage.getItem("token");
+    let decoded = jwt_decode(token);
+    let roles = decoded.roles[0].authority;
+    return roles;
+  };
+
+  const getAllUsers = () => {
+    console.log(getRole());
     let token = localStorage.getItem("token");
 
     var axios = require("axios");
 
     var config = {
       method: "get",
-      url: `${url}/users/5/1`,
+      url: `${url}/users/`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -61,8 +83,10 @@ export default function TeamModal({
 
     axios(config)
       .then(function (response) {
-        // console.log(JSON.stringify(response.data));
-        getTeamMembers();
+        let difference = response.data.filter(
+          (o1) => members.filter((o2) => o2.id === o1.id).length === 0
+        );
+        setUsers(difference);
       })
       .catch(function (error) {
         console.log(error);
@@ -153,18 +177,31 @@ export default function TeamModal({
                 );
               })}
             </AvatarGroup>
-
-            <Fab
-              color="primary"
-              aria-label="add"
-              size="small"
-              sx={{ alignSelf: "center" }}
-              onClick={addTemMember}
-            >
-              <Tooltip title="Add members">
-                <AddIcon />
-              </Tooltip>
-            </Fab>
+            {getRole() === "Team Leader" ? (
+              <>
+                <Fab
+                  color="primary"
+                  aria-label="add"
+                  size="small"
+                  sx={{ alignSelf: "center" }}
+                  onClick={handleOpenU}
+                >
+                  <Tooltip title="Add members">
+                    <AddIcon />
+                  </Tooltip>
+                </Fab>
+                <UserSelectModal
+                  users={users}
+                  user={user}
+                  handleUser={handleUser}
+                  open={openU}
+                  handleClose={handleCloseU}
+                  getTeamMembers={getTeamMembers}
+                  url={url}
+                  team={team}
+                ></UserSelectModal>
+              </>
+            ) : null}
           </Box>
         </Box>
       </Box>

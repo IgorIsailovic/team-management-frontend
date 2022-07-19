@@ -16,6 +16,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import igor from "../images/igor.png";
 import max from "../images/max.jpg";
 import lynda from "../images/lynda.jpg";
+import melinda from "../images/melinda.jpg";
+import marta from "../images/marta.jpg";
+import jim from "../images/jim.jpg";
 import Tasks from "./task/Tasks";
 import Teams from "./team/Teams";
 import UserInfoPassword from "./user/UserInfoPassword";
@@ -218,6 +221,12 @@ export default function MainPage({ url }) {
         return max;
       case "lynda":
         return lynda;
+      case "melinda":
+        return melinda;
+      case "marta":
+        return marta;
+      case "jim":
+        return jim;
       default:
         return null;
     }

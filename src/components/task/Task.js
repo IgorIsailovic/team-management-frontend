@@ -3,6 +3,9 @@ import axios from "axios";
 import igor from "../../images/igor.png";
 import max from "../../images/max.jpg";
 import lynda from "../../images/lynda.jpg";
+import melinda from "../../images/melinda.jpg";
+import marta from "../../images/marta.jpg";
+import jim from "../../images/jim.jpg";
 import TaskModal from "./TaskModal";
 import TaskCard from "./TaskCard";
 
@@ -83,6 +86,12 @@ export default function Task({ task, getUpdatedUserData, url }) {
         return max;
       case "lynda":
         return lynda;
+      case "melinda":
+        return melinda;
+      case "marta":
+        return marta;
+      case "jim":
+        return jim;
       default:
         return null;
     }
