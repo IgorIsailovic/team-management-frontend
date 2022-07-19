@@ -52,9 +52,6 @@
       <a href="#getting-started">Getting Started</a>
     </li>   
         <li><a href="#installation">Installation</a></li>
-      
-   
-    
     <li><a href="#contact">Contact</a></li>
   
   </ol>
