@@ -25,7 +25,7 @@ export default function NewTask({
   const [priority, setPriority] = useState("");
   const [team, setTeam] = useState("");
   const [status, setStatus] = useState("");
-  const [teams, setTeams] = useState("");
+  /* const [teams, setTeams] = useState("");*/
   const [estDur, setEstDur] = useState("");
   const [assigniees, setAssigniees] = useState([]);
   const [assigniee, setAssigniee] = useState([]);
@@ -65,7 +65,7 @@ export default function NewTask({
 
   useEffect(() => {
     getUsers();
-    getTeams();
+    /*  getTeams();*/
   }, []);
 
   useEffect(() => {
@@ -133,7 +133,7 @@ export default function NewTask({
       });
   };
 
-  const getTeams = () => {
+  /*const getTeams = () => {
     let token = localStorage.getItem("token");
     axios
       .get(`${url}/teams/`, {
@@ -147,8 +147,7 @@ export default function NewTask({
       .catch(function (error) {
         console.log(error);
       });
-  };
-
+  };*/
   const addTask = () => {
     let token = localStorage.getItem("token");
     var axios = require("axios");
@@ -321,8 +320,8 @@ export default function NewTask({
                 label="Team"
                 onChange={handleTeam}
               >
-                {teams.length > 0 ? (
-                  teams.map((team) => (
+                {userData.teamUser.length > 0 ? (
+                  userData.teamUser.map((team) => (
                     <MenuItem key={team.id} value={team.id}>
                       {team.name}
                     </MenuItem>

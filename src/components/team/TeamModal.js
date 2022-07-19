@@ -34,7 +34,7 @@ export default function TeamModal({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    //width: "100%",
+
     bgcolor: "background.paper",
     boxShadow: "1px 3px 10px  #9E9E9E",
     p: 2,
@@ -45,7 +45,7 @@ export default function TeamModal({
     maxWidth: "100%",
     maxHeight: "85%",
     //maxWidth: "50rem",
-    minWidth: "20rem",
+    minWidth: "80%",
   };
 
   const [users, setUsers] = useState([]);
