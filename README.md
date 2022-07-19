@@ -13,14 +13,7 @@
     <a href="https://team-management-frontend.herokuapp.com/">View Demo</a>
   </p>
   <p align="center">
-  <style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg .tg-baqh{text-align:center;vertical-align:top}
-</style>
+  
 <table class="tg">
 <thead>
   <tr>
@@ -74,7 +67,7 @@
 
 ## 📝 About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://team-management-frontend.herokuapp.com/)
+![product-screenshot]
 
 Frontend app of the team management project. The project represents a full stack app for managing Teams, Tasks and Users of an organization.
 
@@ -190,15 +183,15 @@ Project Link: [https://github.com/IgorIsailovic/team-management-frontend](https:
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/igor-isailovi%C4%87-9b00b7200/
-[product-screenshot]: src\images\frontend-screenshot.JPG
+[product-screenshot]: https://github.com/IgorIsailovic/team-management-frontend/blob/main/src/images/frontend-screenshot.JPG
 [react.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [react-url]: https://reactjs.org/
 [sign-in]: https://github.com/IgorIsailovic/team-management-frontend/blob/main/src/images/sign-in.JPG
-[sign-up]: src\images\sign-up.JPG
-[teams]: src\images\teams.JPG
-[new-task]: src\images\new-task.JPG
-[user-info]: src\images\user-info.JPG
-[team-details]: src\images\team-details.JPG
-[task-details]: src\images\task-details.JPG
-[add-team-member]: src\images\add-team-member.JPG
-[tasks-list]: src\images\tasks-list.JPG
+[sign-up]: https://github.com/IgorIsailovic/team-management-frontend/blob/main/src/images/sign-up.JPG
+[teams]: https://github.com/IgorIsailovic/team-management-frontend/blob/main/src/images/teams.JPG
+[new-task]: https://github.com/IgorIsailovic/team-management-frontend/blob/main/src/images/new-task.JPG
+[user-info]: https://github.com/IgorIsailovic/team-management-frontend/blob/main/src/images/user-info.JPG
+[team-details]: https://github.com/IgorIsailovic/team-management-frontend/blob/main/src/images/team-details.JPG
+[task-details]: https://github.com/IgorIsailovic/team-management-frontend/blob/main/src/images/task-details.JPG
+[add-team-member]: https://github.com/IgorIsailovic/team-management-frontend/blob/main/src/images/add-team-member.JPG
+[tasks-list]: https://github.com/IgorIsailovic/team-management-frontend/blob/main/src/images/tasks-list.JPG
