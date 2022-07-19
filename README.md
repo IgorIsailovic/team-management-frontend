@@ -193,7 +193,7 @@ Project Link: [https://github.com/IgorIsailovic/team-management-frontend](https:
 [product-screenshot]: src\images\frontend-screenshot.JPG
 [react.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [react-url]: https://reactjs.org/
-[sign-in]: src\images\sign-in.JPG
+[sign-in]: https://github.com/IgorIsailovic/team-management-frontend/blob/main/src/images/sign-in.JPG
 [sign-up]: src\images\sign-up.JPG
 [teams]: src\images\teams.JPG
 [new-task]: src\images\new-task.JPG
