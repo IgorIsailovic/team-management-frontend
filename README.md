@@ -8,7 +8,7 @@
   <h1 align="center">Team management frontend app</h3>
 
   <p align="center">
-    The fronted part of the team managemnt app
+    The fronted part of the team management project
     <br />
     <a href="https://team-management-frontend.herokuapp.com/">View Demo</a>
   </p>
@@ -44,15 +44,12 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#📝-about-the-project"> 📝 About The Project</a>
     </li> 
-        <li><a href="#built-with">Built With</a></li>  
-    <li> <a href="#features">Features</a></li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-    </li>   
-        <li><a href="#installation">Installation</a></li>
-    <li><a href="#contact">Contact</a></li>
+        <li><a href="#🛠️-built-with"> 🛠️ Built With</a></li>  
+    <li> <a href="#✅-features"> ✅ Features</a></li> 
+        <li><a href="#▶️-installation"> ▶️ Installation</a></li>
+    <li><a href="#📧-contact"> 	📧 Contact</a></li>
   
   </ol>
 </details>
@@ -65,9 +62,9 @@
 
 Frontend app of the team management project. The project represents a full stack app for managing Teams, Tasks and Users of an organization.
 
-### Built With
+## 🛠️ Built With
 
-Frontened part of the project is built with React.js.
+Frontend part of the project is built with React.js.
 
 [![React][react.js]][react-url]
 
@@ -87,7 +84,7 @@ Frontened part of the project is built with React.js.
   ![sign-up]
   </br>
   </br>
-- Dashboard with overview of user info, teams that the user is a member of and overview of task assigned the user.
+- Dashboard with an overview of user info, teams that the user is a member of, and overview of tasks assigned to the user.
   </br>
   </br>
   ![product-screenshot]
@@ -105,13 +102,13 @@ Frontened part of the project is built with React.js.
   ![team-details]
   </br>
   </br>
-- Users with the 'Team Leader' role can add other users to specific team.
+- Users with the 'Team Leader' role can add other users to a specific team.
   </br>
   </br>
   ![add-team-member]
   </br>
   </br>
-- List of task assigned to the user broken up in categories based on task status.
+- List of tasks assigned to the user broken up into categories based on task status.
   </br>
   </br>
   ![tasks-list]
@@ -123,7 +120,7 @@ Frontened part of the project is built with React.js.
   ![task-details]
   </br>
   </br>
-- Users with the 'Team Leader' role can create new tasks and assignem to other users.
+- Users with the 'Team Leader' role can create new tasks and assign themem to other users.
   </br>
   </br>
   ![new-task]
@@ -137,7 +134,9 @@ Frontened part of the project is built with React.js.
   </br>
 - Log out.
 
-## Getting Started
+## ▶️ Installation
+
+### Getting Started
 
 To get started make sure you have the latest version of npm.
 
@@ -145,8 +144,6 @@ To get started make sure you have the latest version of npm.
   ```sh
   npm install npm@latest -g
   ```
-
-### Installation
 
 1. Clone the repo
    ```sh
@@ -163,7 +160,7 @@ To get started make sure you have the latest version of npm.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Contact
+## 📧Contact
 
 Your Name - iigorisailovic@gmail.com - https://www.linkedin.com/in/igor-isailovi%C4%87-9b00b7200/
 
