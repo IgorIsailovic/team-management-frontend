@@ -162,14 +162,14 @@ To get started make sure you have the latest version of npm.
 
 ## 📧Contact
 
-Your Name - iigorisailovic@gmail.com - https://www.linkedin.com/in/igor-isailovi%C4%87-9b00b7200/
+Your Name - iigorisailovic@gmail.com - https://www.linkedin.com/in/igorisailovic/
 
 Project Link: [https://github.com/IgorIsailovic/team-management-frontend](https://github.com/IgorIsailovic/team-management-frontend)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/in/igor-isailovi%C4%87-9b00b7200/
+[linkedin-url]: https://www.linkedin.com/in/igorisailovic/
 [product-screenshot]: https://github.com/IgorIsailovic/team-management-frontend/blob/main/src/images/frontend-screenshot.JPG
 [react.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [react-url]: https://reactjs.org/
