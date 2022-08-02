@@ -28,8 +28,8 @@
   </tr>
   <tr>
     <td class="tg-baqh">username</td>
-    <td class="tg-baqh">Max</td>
-    <td class="tg-baqh">Marta</td>
+    <td class="tg-baqh">max</td>
+    <td class="tg-baqh">marta</td>
   </tr>
   <tr>
     <td class="tg-baqh">password</td>
