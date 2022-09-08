@@ -17,7 +17,7 @@
 <table class="tg">
 <thead>
   <tr>
-    <th class="tg-baqh" colspan="3">Demo users</th>
+    <th class="tg-baqh" colspan="6">Demo users</th>
   </tr>
 </thead>
 <tbody>
